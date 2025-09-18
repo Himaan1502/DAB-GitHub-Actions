@@ -1,0 +1,42 @@
+# This is a Databricks asset bundle definition for ci_cd_template.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: ci_cd_template
+  uuid: 0e2da254-14b4-43ff-b6bd-461fbf4495e2
+
+artifacts:
+  python_artifact:
+    type: whl
+    build: uv build --wheel
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+targets:
+  dev:
+    # The default target uses 'mode: development' to create a development copy.
+    # - Deployed resources get prefixed with '[dev my_user_name]'
+    # - Any job schedules and triggers are paused by default.
+    # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-1470412731276327.7.azuredatabricks.net
+
+    presets:
+      # Set dynamic_version: true on all artifacts of type "whl".
+      # This makes "bundle deploy" add a timestamp to wheel's version before uploading,
+      # new wheel takes over the previous installation even if actual wheel version is unchanged.
+      # See https://docs.databricks.com/aws/en/dev-tools/bundles/settings
+      artifacts_dynamic_version: true
+
+  prod:
+    mode: production
+    workspace:
+      host: https://adb-1470412731276327.7.azuredatabricks.net
+      # We explicitly deploy to /Workspace/Users/himaan.celebal@outlook.com to make sure we only have a single copy.
+      root_path: /Workspace/Users/himaan.celebal@outlook.com/.bundle/${bundle.name}/${bundle.target}
+    permissions:
+      - user_name: himaan.celebal@outlook.com
+        level: CAN_MANAGE
