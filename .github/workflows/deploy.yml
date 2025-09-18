@@ -39,6 +39,6 @@ jobs:
           fi
 
       - name: Deploy Bundle using Global Template
-        uses: Himaan1502/databricks-ci-cd-templates/.github/actions/deploy@HotelSystem
+        uses: Himaan1502/databricks-ci-cd-templates/.github/actions/deploy@main
         with:
           target: ${{ steps.envselect.outputs.target }}
