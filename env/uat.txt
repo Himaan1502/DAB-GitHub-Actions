@@ -1,0 +1,6 @@
+# UAT environment
+DATABRICKS_HOST=https://adb-1459329784291348.8.azuredatabricks.net
+DATABRICKS_RG=databricks-uat-rg
+UC_CATALOG=uat_catalog
+UC_SCHEMA=uat_schema
+DATA_PATH=/mnt/uat-data
