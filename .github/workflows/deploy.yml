@@ -1,0 +1,44 @@
+name: Deploy Databricks Bundle
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select environment to deploy to"
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - uat
+          - prod
+
+  push:
+    branches:
+      - main      # auto deploys → prod
+      - develop   # auto deploys → dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Set Target Environment
+        id: envselect
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "target=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "target=prod" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+            echo "target=dev" >> $GITHUB_OUTPUT
+          else
+            echo "target=uat" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy Bundle using Global Template
+        uses: Himaan1502/databricks-ci-cd-templates/.github/actions/deploy@HotelSystem
+        with:
+          target: ${{ steps.envselect.outputs.target }}
