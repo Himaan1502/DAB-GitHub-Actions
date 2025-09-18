@@ -50,8 +50,16 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Install Databricks CLI
-        run: pip install databricks-cli
+      - name: Load Environment Variables
+        id: loadvars
+        run: |
+          echo "Loading env/${{ steps.envselect.outputs.target }}.txt"
+          while IFS='=' read -r key value; do
+            # skip comments and empty lines
+            if [[ ! "$key" =~ ^# && -n "$key" ]]; then
+              echo "$key=$value" >> $GITHUB_ENV
+            fi
+          done < env/${{ steps.envselect.outputs.target }}.txt
 
       - name: Deploy Bundle using Global Template
         uses: Himaan1502/databricks-ci-cd-templates/.github/actions/deploy@main
