@@ -1,0 +1,6 @@
+# Prod environment
+DATABRICKS_HOST=https://adb-999316818566339.19.azuredatabricks.net
+DATABRICKS_RG=databricks-prod-rg
+UC_CATALOG=prod_catalog
+UC_SCHEMA=prod_schema
+DATA_PATH=/mnt/prod-data
