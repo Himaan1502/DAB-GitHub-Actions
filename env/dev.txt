@@ -1,0 +1,6 @@
+# Dev environment
+DATABRICKS_HOST=https://adb-1470412731276327.7.azuredatabricks.net
+DATABRICKS_RG=databricks-dev-rg
+UC_CATALOG=dev_catalog
+UC_SCHEMA=dev_schema
+DATA_PATH=/mnt/dev-data
